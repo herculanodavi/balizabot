@@ -2,68 +2,51 @@ import math
 
 DEBUG = True
 
+
 class LineFollower:
     def __init__(self):
-        self.normalSpeed = 25
+        self.normalSpeed = 35
         self.V_RATIO = 50  # Is not calculated
         self.desiredVelocity = self.normalSpeed
         self.desiredAngle = []
 
-        
-
-    def normalize(self, vector):
-        magnitude = math.sqrt(vector.x ** 2 + vector.y ** 2)
-        if magnitude == 0:
-            return
-        [vector.x, vector.y] = [vector.x/magnitude, vector.y/magnitude]
-        return vector
-
     def setControlData(self, car, desired_position, line_ref):
-        #if DEBUG is True:
-            #print "(%d, %d)" % (line_ref.x, line_ref.y)
-        if (desired_position.x - car.pose.x) * line_ref.x + (desired_position.y - car.pose.y) * line_ref.y < 0:
-            line_ref.x = -line_ref.x
-            line_ref.y = -line_ref.y
-
-        line_ref = self.normalize(line_ref)
+        # if DEBUG is True:
+        # print "(%d, %d)" % (line_ref.x, line_ref.y)
+        # if (desired_position.x - car.pose.x) * line_ref.x + (desired_position.y - car.pose.y) * line_ref.y < 0:
+        #     line_ref.x = -line_ref.x
+        #     line_ref.y = -line_ref.y
 
         rotation = car.pose.rotation
-        phiLine = math.atan2(line_ref.y, line_ref.x)# ref angle
-        positionError = math.sqrt((car.pose.x - desired_position.x) * (car.pose.x - desired_position.x) +
+        phi_line = math.atan2(line_ref.y, line_ref.x)  # ref angle
+        position_error = math.sqrt((car.pose.x - desired_position.x) * (car.pose.x - desired_position.x) +
                                   (car.pose.y - desired_position.y) * (car.pose.y - desired_position.y))
-        lineError = car.pose.x * line_ref.y - car.pose.y * line_ref.x + \
-                    line_ref.x * desired_position.y - line_ref.y * desired_position.x
-        phiError = phiLine - rotation
-        #k1, k2, k3 e k4 sao constantes carteadas de controle
-        k1 = 0.002
-        k2 = 0.002
+        line_error = car.pose.y - desired_position.y
+        phi_error = (rotation - phi_line) * 180 / math.pi
+        # k1, k2, k3 e k4 sao constantes carteadas de controle
+        k_line = 0.018
+        k_phi = 0.03
         k3 = 1
         k4 = 1
-        if math.fabs(positionError) > 10:
-            proportionalError = k1 * lineError + k2 * phiError
+        if math.fabs(desired_position.x - car.pose.x) > 10:
+            proportional_error = k_line * line_error + k_phi * phi_error
         else:
             self.desiredAngle = 0
             self.desiredVelocity = 0
             return
-        if proportionalError > 1:
-            proportionalError = 1
-        elif proportionalError <-1:
-            proportionalError = -1
-        self.desiredAngle = math.asin(proportionalError) * 180.0 / math.pi
+        if proportional_error > 1:
+            proportional_error = 1
+        elif proportional_error < -1:
+            proportional_error = -1
+        self.desiredAngle = math.asin(proportional_error) * 180.0 / math.pi
         # self.desiredVelocity = self.normalSpeed/(1.0 + k3 * positionError + k4 * phiError)
         if DEBUG is True:
-            print "1 %f" % positionError
-            print "2 %f" % lineError
-            print "3 %f" % phiError
-            print "4 %f" %(k1 * lineError + k2 * phiError)
+            print "1 %f" % position_error
+            print "2: %f" % (line_error*k_line)
+            print "3 %f" % (phi_error*k_phi)
+            print "4 %f" %(k_line * line_error + k_phi * phi_error)
             print "5 %f" % self.desiredAngle
-
-
-
-
-
-
-
+#
 # void LineControl::setControlData(representations::Player &player, modeling::WorldModel &wm,
 #                                     Pose2D desiredPosition, Vector2<double> lineRef, double velocity) {
 #     if ((desiredPosition.translation.x - player.getPose().translation.x) * lineRef.x +

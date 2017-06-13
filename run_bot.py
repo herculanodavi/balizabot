@@ -23,8 +23,6 @@ model.init()
 model.init()
 model.init()
 
-TEST = True
-
 while(1):
     model.update()
     decision_making.update(model)

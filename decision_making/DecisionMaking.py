@@ -1,8 +1,8 @@
 from modeling import Pose2D, Vector2
-from math import atan2
+from math import atan2, sqrt
 import cv2
 
-OFFSET = 100
+OFFSET = 130
 VISION_DEBUG = True
 DEBUG = False
 
@@ -33,8 +33,8 @@ class DecisionMaking:
         self.desired_position.rotation = atan2(chosen_vacancy.line_up.y - chosen_vacancy.line_down.y,
                                                chosen_vacancy.line_up.x - chosen_vacancy.line_down.x)
 
-        self.line_ref = Vector2.Vector2(chosen_vacancy.line_up.y - chosen_vacancy.line_down.y,
-                                        chosen_vacancy.line_up.x - chosen_vacancy.line_down.x)
+        self.line_ref = self.normalize(Vector2.Vector2(chosen_vacancy.line_up.x - chosen_vacancy.line_down.x,
+                                        chosen_vacancy.line_up.y - chosen_vacancy.line_down.y))
 
         if VISION_DEBUG is True:
 
@@ -43,3 +43,10 @@ class DecisionMaking:
             cv2.circle(frame, (int(self.desired_position.x), int(self.desired_position.y)), 4, (0, 255, 0), 3)
             cv2.imshow('desired position debug', frame)
             cv2.waitKey(1)
+
+    def normalize(self, vector):
+        magnitude = sqrt(vector.x ** 2 + vector.y ** 2)
+        if magnitude == 0:
+            return
+        [vector.x, vector.y] = [vector.x/magnitude, vector.y/magnitude]
+        return vector
