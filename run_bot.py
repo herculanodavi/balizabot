@@ -6,11 +6,14 @@ from communication import SendData
 from decision_making import DecisionMaking
 from time import sleep
 
+DEBUG = False
 FORWARD = 1
 BACKWARD = -1
 
 model = Modeling()
-
+control = LineFollower.LineFollower()
+decision_making = DecisionMaking.DecisionMaking()
+communication = SendData.SendData()
 # VAI PEGAR AS LINHAS SIM
 model.init()
 model.init()
@@ -20,19 +23,19 @@ model.init()
 model.init()
 model.init()
 
-#communication = SendData.SendData()
-model.update()
-decision_making = DecisionMaking.DecisionMaking()
-decision_making.update(model)
+TEST = True
 
-control = LineFollower.LineFollower()
-print 'extern line_ref = (%d, %d)' % (decision_making.line_ref.x, decision_making.line_ref.y)
-control.setControlData(model.car, decision_making.desired_position, decision_making.line_ref)
+while(1):
+    model.update()
+    decision_making.update(model)
+    if DEBUG is True:
+        print 'extern line_ref = (%d, %d)' % (decision_making.line_ref.x, decision_making.line_ref.y)
+    control.setControlData(model.car, decision_making.desired_position, decision_making.line_ref)
 
-dutyMotor1 = control.desiredVelocity()
-dutyMotor2 = control.desiredVelocity()
-servoAngle = control.desiredAngle()
-
-direcao1 = FORWARD
-direcao2 = FORWARD
-communication.send(direcao1, direcao2, dutyMotor1, dutyMotor2, servoAngle)
+    # dutyMotor1 = control.desiredVelocity()
+    # dutyMotor2 = control.desiredVelocity()
+    # servoAngle = control.desiredAngle()
+    #
+    direcao1 = FORWARD
+    direcao2 = FORWARD
+    communication.send(direcao1, direcao2, control.desiredVelocity, control.desiredVelocity, -control.desiredAngle)

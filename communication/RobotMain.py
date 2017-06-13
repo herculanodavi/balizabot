@@ -38,6 +38,7 @@ motor1.ChangeDutyCycle(15)
 motor2.ChangeDutyCycle(15)
 
 def callbackFloatReceiver(data):
+    print "Received Data!"
     direcao1 = data.data[0]
     direcao2 = data.data[1]
     dutyMotor1 = data.data[2]
