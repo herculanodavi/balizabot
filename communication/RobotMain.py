@@ -12,19 +12,19 @@ IO.setmode(IO.BCM)
 
 # Estabelecendo pinos de comunicacao
 
-IO.setup(19,IO.OUT)
-IO.setup(22,IO.OUT)
-IO.setup(23,IO.OUT)
+IO.setup(19, IO.OUT)
+IO.setup(22, IO.OUT)
+IO.setup(23, IO.OUT)
 
 # Definindo modo de operacao dos pinos
 
-servo = IO.PWM(19,50) # Pino 19, frequencia 50 Hz
+servo = IO.PWM(19, 50) # Pino 19, frequencia 50 Hz
 servo.start(10) # Duty cicle de inicio: 10%
 
-motor1 = IO.PWM(22,100) # Pino 22, frequencia 100 Hz
+motor1 = IO.PWM(22, 100) # Pino 22, frequencia 100 Hz
 motor1.start(15) # Duty cicle de inicio: 15%
 
-motor2 = IO.PWM(23,100) # Pino 23, frequencia 100 Hz
+motor2 = IO.PWM(23, 100) # Pino 23, frequencia 100 Hz
 motor2.start(15) # Duty cicle de inicio: 15%
 
 # Definindo constantes
@@ -32,6 +32,10 @@ motor2.start(15) # Duty cicle de inicio: 15%
 frente = 1
 
 tras = -1
+
+servo.ChangeDutyCycle(6.5)
+motor1.ChangeDutyCycle(15)
+motor2.ChangeDutyCycle(15)
 
 def callbackFloatReceiver(data):
     direcao1 = data.data[0]
