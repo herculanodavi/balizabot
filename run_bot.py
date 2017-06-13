@@ -38,4 +38,5 @@ while(1):
     #
     direcao1 = FORWARD
     direcao2 = FORWARD
+
     communication.send(direcao1, direcao2, control.desiredVelocity, control.desiredVelocity, -control.desiredAngle)

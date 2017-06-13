@@ -3,7 +3,8 @@ from math import atan2
 import cv2
 
 OFFSET = 100
-DEBUG = True
+VISION_DEBUG = True
+DEBUG = False
 
 class DecisionMaking:
     def __init__(self):
@@ -35,9 +36,9 @@ class DecisionMaking:
         self.line_ref = Vector2.Vector2(chosen_vacancy.line_up.y - chosen_vacancy.line_down.y,
                                         chosen_vacancy.line_up.x - chosen_vacancy.line_down.x)
 
-        if DEBUG is True:
-            print 'line_ref: (%d, %d)' % (self.line_ref.x, self.line_ref.y)
+        if VISION_DEBUG is True:
 
+            # print 'line_ref: (%d, %d)' % (self.line_ref.x, self.line_ref.y)
             frame = model.frame
             cv2.circle(frame, (int(self.desired_position.x), int(self.desired_position.y)), 4, (0, 255, 0), 3)
             cv2.imshow('desired position debug', frame)

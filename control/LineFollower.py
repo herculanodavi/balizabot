@@ -8,6 +8,7 @@ class LineFollower:
         self.V_RATIO = 50  # Is not calculated
         self.desiredVelocity = self.normalSpeed
         self.desiredAngle = []
+
         
 
     def normalize(self, vector):
@@ -18,8 +19,8 @@ class LineFollower:
         return vector
 
     def setControlData(self, car, desired_position, line_ref):
-        if DEBUG is True:
-            print "(%d, %d)" % (line_ref.x, line_ref.y)
+        #if DEBUG is True:
+            #print "(%d, %d)" % (line_ref.x, line_ref.y)
         if (desired_position.x - car.pose.x) * line_ref.x + (desired_position.y - car.pose.y) * line_ref.y < 0:
             line_ref.x = -line_ref.x
             line_ref.y = -line_ref.y
@@ -34,11 +35,16 @@ class LineFollower:
                     line_ref.x * desired_position.y - line_ref.y * desired_position.x
         phiError = phiLine - rotation
         #k1, k2, k3 e k4 sao constantes carteadas de controle
-        k1 = 0.008
-        k2 = 0.008
+        k1 = 0.002
+        k2 = 0.002
         k3 = 1
         k4 = 1
-        proportionalError = k1 * lineError + k2 * phiError
+        if math.fabs(positionError) > 10:
+            proportionalError = k1 * lineError + k2 * phiError
+        else:
+            self.desiredAngle = 0
+            self.desiredVelocity = 0
+            return
         if proportionalError > 1:
             proportionalError = 1
         elif proportionalError <-1:
@@ -46,11 +52,11 @@ class LineFollower:
         self.desiredAngle = math.asin(proportionalError) * 180.0 / math.pi
         # self.desiredVelocity = self.normalSpeed/(1.0 + k3 * positionError + k4 * phiError)
         if DEBUG is True:
-            print "Position error: %f" % positionError
-            print "Line error: %f" % lineError
-            print "Phi error: %f" % phiError
-            print "Sin(desiredAngle) %f" %(k1 * lineError + k2 * phiError)
-            print "Desired Angle: %f" % self.desiredAngle
+            print "1 %f" % positionError
+            print "2 %f" % lineError
+            print "3 %f" % phiError
+            print "4 %f" %(k1 * lineError + k2 * phiError)
+            print "5 %f" % self.desiredAngle
 
 
 
