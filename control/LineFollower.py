@@ -9,6 +9,8 @@ class LineFollower:
         self.V_RATIO = 50  # Is not calculated
         self.desiredVelocity = self.normalSpeed
         self.desiredAngle = []
+        self.errorBefore = 0
+        self.derivativeBefore = 0
 
     def setControlData(self, car, desired_position, line_ref):
         # if DEBUG is True:
@@ -26,9 +28,9 @@ class LineFollower:
         # k1, k2, k3 e k4 sao constantes carteadas de controle
         k_line = 0.018
         k_phi = 0.03
-        k3 = 1
-        k4 = 1
+        k_derivative = 0.0025
         proportional_error = k_line * line_error + k_phi * phi_error
+        derivative = -0.222*self.derivativeBefore + k_derivative*94.2478*(proportional_error - self.errorBefore)
         # self.desiredVelocity = (self.normalSpeed+15) / (1.0 + math.fabs(proportional_error))
         # if self.desiredVelocity > 50:
         #     self.desiredVelocity = 50
@@ -36,17 +38,23 @@ class LineFollower:
             self.desiredAngle = 0
             self.desiredVelocity = 0
             return
+        proportional_error = proportional_error + derivative
         if proportional_error > 1:
             proportional_error = 1
         elif proportional_error < -1:
             proportional_error = -1
         self.desiredAngle = math.asin(proportional_error) * 180.0 / math.pi
+        self.derivativeBefore = derivative
+        self.errorBefore = proportional_error
+
         if DEBUG is True:
-            print "1 %f" % position_error
-            print "2: %f" % (line_error*k_line)
-            print "3 %f" % (phi_error*k_phi)
-            print "4 %f" %(k_line * line_error + k_phi * phi_error)
-            print "5 %f" % self.desiredAngle
+            print "proportional error: %f" % proportional_error
+            print "derivative %f" % derivative
+            # print "1 %f" % position_error
+            # print "2: %f" % (line_error*k_line)
+            # print "3 %f" % (phi_error*k_phi)
+            # print "4 %f" %(k_line * line_error + k_phi * phi_error)
+            # print "5 %f" % self.desiredAngle
             # print "Desired speed %f" % self.desiredVelocity
 #
 # void LineControl::setControlData(representations::Player &player, modeling::WorldModel &wm,

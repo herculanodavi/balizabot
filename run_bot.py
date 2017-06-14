@@ -25,7 +25,7 @@ model.init()
 model.init()
 model.init()
 
-sleep(10)
+# sleep(10)
 arrived = False
 
 while arrived == False:

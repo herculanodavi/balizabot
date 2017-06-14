@@ -64,8 +64,8 @@ class Park:
         linha += [FORWARD]
         linha += [self.normalSpeed]  # Movimento devagar
         linha += [self.normalSpeed]  # Movimento devagar
-        linha += [30]
-        linha += [2.5]  # Duracao movimento
+        linha += [20]
+        linha += [2]  # Duracao movimento
         movimentos.append(linha)
         linha = []
 
