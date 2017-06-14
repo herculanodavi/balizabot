@@ -10,5 +10,5 @@ class SendData():
 
     def send(self, direcao1, direcao2, dutyMotor1, dutyMotor2, servoAngle):
         data = Float32MultiArray()
-        data.data = [direcao1, direcao2, dutyMotor1, dutyMotor2, servoAngle]
+        data.data = [direcao1, direcao2, dutyMotor1, dutyMotor2, -servoAngle]
         self.pub.publish(data)

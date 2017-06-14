@@ -12,7 +12,7 @@ FORWARD = 1
 BACKWARD = -1
 
 model = Modeling()
-park = Park()
+park = Park.Park()
 control = LineFollower.LineFollower()
 decision_making = DecisionMaking.DecisionMaking()
 communication = SendData.SendData()
@@ -26,9 +26,9 @@ model.init()
 model.init()
 
 sleep(10)
-chegou = False
+arrived = False
 
-while(!chegou):
+while arrived == False:
     model.update()
     decision_making.update(model)
     if DEBUG is True:
@@ -39,23 +39,24 @@ while(!chegou):
     # dutyMotor2 = control.desiredVelocity()
     # servoAngle = control.desiredAngle()
 
-    # Condição de parada
+    # Condicao de parada
     if control.desiredVelocity == 0:
-        chegou = True
+        arrived = True
 
     direcao1 = FORWARD
     direcao2 = FORWARD
 
-    communication.send(direcao1, direcao2, control.desiredVelocity, control.desiredVelocity, -control.desiredAngle)
+    communication.send(direcao1, direcao2, control.desiredVelocity, control.desiredVelocity, control.desiredAngle)
 
 
 # Movimento KeyFrame
 
 movimentos = park.do()
 
-for i in range 0,4,1:
+
+for i in range (0,4,1):
     communication.send(movimentos[i][0], movimentos[i][1], movimentos[i][2], movimentos[i][3], movimentos[i][4])
     sleep(movimentos[i][5])
-    # Parando após o movimento
+    # Parando apos o movimento
     communication.send(1, 1, 0, 0, 0)
-    sleep(0.5)
+    sleep(1)

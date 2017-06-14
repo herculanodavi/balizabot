@@ -42,12 +42,12 @@ class LineFollower:
             proportional_error = -1
         self.desiredAngle = math.asin(proportional_error) * 180.0 / math.pi
         if DEBUG is True:
-            # print "1 %f" % position_error
-            # print "2: %f" % (line_error*k_line)
-            # print "3 %f" % (phi_error*k_phi)
-            # print "4 %f" %(k_line * line_error + k_phi * phi_error)
-            # print "5 %f" % self.desiredAngle
-            print "Desired speed %f" % self.desiredVelocity
+            print "1 %f" % position_error
+            print "2: %f" % (line_error*k_line)
+            print "3 %f" % (phi_error*k_phi)
+            print "4 %f" %(k_line * line_error + k_phi * phi_error)
+            print "5 %f" % self.desiredAngle
+            # print "Desired speed %f" % self.desiredVelocity
 #
 # void LineControl::setControlData(representations::Player &player, modeling::WorldModel &wm,
 #                                     Pose2D desiredPosition, Vector2<double> lineRef, double velocity) {

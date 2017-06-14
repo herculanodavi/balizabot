@@ -2,7 +2,7 @@ from modeling import Pose2D, Vector2
 from math import atan2, sqrt
 import cv2
 
-OFFSET = 130
+OFFSET = 140
 VISION_DEBUG = True
 DEBUG = False
 
