@@ -59,7 +59,7 @@ class Park:
         movimentos.append(linha)
         linha = []
 
-        # Movimento 1: Movimento devagar para frente
+        # Movimento 5: Movimento devagar para frente
         linha += [FORWARD]
         linha += [FORWARD]
         linha += [self.normalSpeed]  # Movimento devagar
