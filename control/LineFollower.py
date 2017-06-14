@@ -28,9 +28,11 @@ class LineFollower:
         k_phi = 0.03
         k3 = 1
         k4 = 1
-        if math.fabs(desired_position.x - car.pose.x) > 10:
-            proportional_error = k_line * line_error + k_phi * phi_error
-        else:
+        proportional_error = k_line * line_error + k_phi * phi_error
+        # self.desiredVelocity = (self.normalSpeed+15) / (1.0 + math.fabs(proportional_error))
+        # if self.desiredVelocity > 50:
+        #     self.desiredVelocity = 50
+        if desired_position.x - car.pose.x < 10:
             self.desiredAngle = 0
             self.desiredVelocity = 0
             return
@@ -39,13 +41,13 @@ class LineFollower:
         elif proportional_error < -1:
             proportional_error = -1
         self.desiredAngle = math.asin(proportional_error) * 180.0 / math.pi
-        # self.desiredVelocity = self.normalSpeed/(1.0 + k3 * positionError + k4 * phiError)
         if DEBUG is True:
-            print "1 %f" % position_error
-            print "2: %f" % (line_error*k_line)
-            print "3 %f" % (phi_error*k_phi)
-            print "4 %f" %(k_line * line_error + k_phi * phi_error)
-            print "5 %f" % self.desiredAngle
+            # print "1 %f" % position_error
+            # print "2: %f" % (line_error*k_line)
+            # print "3 %f" % (phi_error*k_phi)
+            # print "4 %f" %(k_line * line_error + k_phi * phi_error)
+            # print "5 %f" % self.desiredAngle
+            print "Desired speed %f" % self.desiredVelocity
 #
 # void LineControl::setControlData(representations::Player &player, modeling::WorldModel &wm,
 #                                     Pose2D desiredPosition, Vector2<double> lineRef, double velocity) {

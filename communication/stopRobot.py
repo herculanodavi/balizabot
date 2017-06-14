@@ -1,4 +1,4 @@
 import SendData
 communication = SendData.SendData()
 # a = float(input())
-communication.send(1, 1, 0, 0, 6.5)
+communication.send(1, 1, 0, 0, 0)
