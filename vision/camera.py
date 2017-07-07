@@ -8,7 +8,12 @@ import cv2
 class Camera():
     def __init__(self):
         if not POKEMON:
+            # find webcam
             self.cap = cv2.VideoCapture(1)
+
+            # video recorder
+            fourcc = cv2.cv.CV_FOURCC(*'XVID')
+            self.videoWriter = cv2.VideoWriter('output.avi', fourcc, 20, (640, 480))
             #self.cap.set(cv2.cv.CV_CAP_PROP_BRIGHTNESS, 0.3)
             #self.cap.set(cv2.cv.CV_CAP_PROP_SATURATION, 0.5)
             #self.cap.set(cv2.cv.CV_CAP_PROP_CONTRAST, .3)
@@ -23,4 +28,9 @@ class Camera():
             # with picamera.array.PiRGBArray(self.camera) as stream:
             # return stream.array
             ret, img = self.cap.read()
+            self.video_writer.write(img)
             return img
+
+    def release(self):
+        self.cap.release()
+        video_writer.release()
